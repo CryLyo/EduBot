@@ -883,6 +883,7 @@ class QuizCog(commands.Cog):
     @commands.guild_only()
     @commands.command("add")
     async def add_to_dynamic(self, ctx, *args):
+        """ Add an answer option to a dynamic quiz running in the channel where the command is issued. """
         to_add = " ".join(args)
         quiz = Quiz.get_quiz(ctx.channel.id, type=identifier.Channel_ID)
         if quiz:
@@ -1002,6 +1003,7 @@ class QuizCog(commands.Cog):
     @commands.dm_only()
     @commands.command("create_quiz", aliases=("create-quiz","createquiz"))
     async def creation_create_quiz(self, ctx):
+        """ Summon a Quiz Creation Widget to create a quiz. """
         if not self.admin_check(ctx):
             return
 
@@ -1019,6 +1021,7 @@ class QuizCog(commands.Cog):
     @commands.dm_only()
     @commands.command("set_title", aliases=("set-title", "settitle"))
     async def creation_set_title(self, ctx, *args):
+        """ Set the title of the quiz currently under construction. """
         if not self.admin_check(ctx):
             return
         creator = QuizCreator.get_creator(ctx.author.id)
@@ -1033,6 +1036,7 @@ class QuizCog(commands.Cog):
     @commands.dm_only()
     @commands.command("set_question", aliases=("set-question", "setquestion"))
     async def creation_set_question(self, ctx, *args):
+        """ Set the question of the quiz currently under construction. """
         if not self.admin_check(ctx):
             return
         creator = QuizCreator.get_creator(ctx.author.id)
@@ -1048,6 +1052,7 @@ class QuizCog(commands.Cog):
     @commands.dm_only()
     @commands.command("add_option", aliases=("add-option", "addoption"))
     async def creation_add_option(self, ctx, *args):
+        """ Add an answer option to the quiz currently under construction. """
         if not self.admin_check(ctx):
             return
         creator = QuizCreator.get_creator(ctx.author.id)
@@ -1063,6 +1068,7 @@ class QuizCog(commands.Cog):
     @commands.dm_only()
     @commands.command("remove_option", aliases=("remove-option", "removeoption"))
     async def creation_remove_option(self, ctx, id):
+        """ Remove an answer option from the quiz currently under construction by its number. """
         if not id.isdigit():
             return
         if not self.admin_check(ctx):
@@ -1082,6 +1088,7 @@ class QuizCog(commands.Cog):
     @commands.dm_only()
     @commands.command("edit_option", aliases=("edit-option", "editoption"))
     async def creation_edit_option(self, ctx, id, *args):
+        """ Edit an answer option from the quiz currently under construction by its number. """
         if not id.isdigit():
             return
         if not self.admin_check(ctx):
@@ -1102,6 +1109,7 @@ class QuizCog(commands.Cog):
     @commands.dm_only()
     @commands.command("mark_correct", aliases=("mark-correct", "markcorrect"))
     async def creation_mark_correct(self, ctx, id):
+        """ Mark the correct answer option for the quiz currently under construction by its number. """
         if not id.isdigit():
             return
         if not self.admin_check(ctx):
@@ -1121,6 +1129,7 @@ class QuizCog(commands.Cog):
     @commands.dm_only()
     @commands.command("set_image", aliases=("set-image", "setimage"))
     async def creation_set_image(self, ctx):
+        """ Set the image in the final quiz widget of the quiz currently under construction, upload with command. """
         if not self.admin_check(ctx):
             return
         creator = QuizCreator.get_creator(ctx.author.id)
@@ -1146,6 +1155,7 @@ class QuizCog(commands.Cog):
     @commands.dm_only()
     @commands.command("finish")
     async def creation_done(self, ctx):
+        """ Finish the quiz currently under construction, saving it to memory. """
         if not self.admin_check(ctx):
             return
         creator = QuizCreator.get_creator(ctx.author.id)
@@ -1166,6 +1176,7 @@ class QuizCog(commands.Cog):
     @commands.dm_only()
     @commands.command("load")
     async def creation_load(self, ctx, id):
+        """ Load a quiz by ID for editing in active quiz creation widget, use quiz viewer to obtain ID numbers. """
         if not id.isdigit():
             return
 
@@ -1192,6 +1203,7 @@ class QuizCog(commands.Cog):
     @commands.dm_only()
     @commands.command("view_quizzes", aliases=("view-quizzes", "viewquizzes"))
     async def view_quizzes(self, ctx):
+        """ View all quizzes currently saved to disk. ID's can be used to start and edit the quiz. """
         if not self.admin_check(ctx):
             return
         if len(os.listdir(self.storagedir)) == 0:
@@ -1216,6 +1228,7 @@ class QuizCog(commands.Cog):
     @commands.dm_only()
     @commands.command("remove_quiz", aliases=("remove-quiz","removequiz"))
     async def remove_quiz(self, ctx, id):
+        """ Remove a quiz from memory by ID. This action is irreversible. """
         if not id.isdigit():
             return
         if not self.admin_check(ctx):
@@ -1245,6 +1258,7 @@ class QuizCog(commands.Cog):
     @commands.dm_only()
     @commands.command("start_quiz", aliases=("start-quiz", "startquiz"))
     async def start_quiz(self, ctx, id):
+        """ Start a quiz by ID in a marked quiz channel. """
         if not id.isdigit():
             return
         if not self.admin_check(ctx):
@@ -1290,6 +1304,7 @@ class QuizCog(commands.Cog):
     @commands.dm_only()
     @commands.command("select_channel", aliases=("select-channel", "selectchannel"))
     async def quiz_select_channel(self, ctx, id):
+        """ Select a channel to start a quiz in. Used after start_quiz command has been issued. """
         if not id.isdigit():
             return
         if not self.admin_check(ctx):
@@ -1339,6 +1354,7 @@ class QuizCog(commands.Cog):
     @commands.dm_only()
     @commands.command("change_correct", aliases=("change-correct", "changecorrect"))
     async def change_correct_answer(self, ctx, id):
+        """ Change the correct answer of a currently running quiz by the answer number. """
         if not id.isdigit():
             return
         if not self.admin_check(ctx):
@@ -1370,6 +1386,7 @@ class QuizCog(commands.Cog):
     @commands.command("mark_quiz_channel", aliases=("mark-quiz-channel","markquizchannel",
                                                     "mark_quizchannel", "mark-quizchannel"))
     async def mark_quiz_channel(self, ctx):
+        """ Mark a channel as a channel used for quizzes. Used for starting a quiz. """
         if not self.admin_check(ctx):
             return
         self.quiz_channels.append(ctx.channel.id)
@@ -1382,6 +1399,7 @@ class QuizCog(commands.Cog):
     @commands.command("unmark_quiz_channel", aliases=("unmark-quiz-channel", "unmarkquizchannel",
                                                       "unmark_quizchannel", "unmark-quizchannel"))
     async def unmark_quiz_channel(self, ctx):
+        """ Unmark a channel as a channel used for quizzes. """
         if not self.admin_check(ctx):
             return
         if ctx.channel.id in self.quiz_channels:
