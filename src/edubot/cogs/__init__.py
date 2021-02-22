@@ -1,4 +1,4 @@
-from .poll import Poll
+from .quiz import QuizCog
 from .queue import QueueCog
 
-__all__ = ["QueueCog", "Poll"]
+__all__ = ["QueueCog", "QuizCog"]

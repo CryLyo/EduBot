@@ -22,7 +22,7 @@ from pathlib import Path
 import discord
 from discord.ext import commands
 
-from .cogs import Poll, QueueCog
+from .cogs import QuizCog, QueueCog
 
 
 class EduBot(commands.Bot):
@@ -35,30 +35,32 @@ class EduBot(commands.Bot):
     """
 
     def __init__(self):
-        super().__init__(command_prefix="!", case_insensitive=True)
+        super().__init__(command_prefix="!", case_insensitive=True, intents=discord.Intents().all())
         self.classrooms = dict()
         self.datadir = Path.joinpath(Path.home(), ".edubot")
         if not Path.exists(self.datadir):
             Path.mkdir(self.datadir)
         self.add_cog(QueueCog(self))
-        self.add_cog(Poll(self))
+        self.add_cog(QuizCog(self))
 
 
-    async def dm(self, user, message):
+    async def dm(self, user, message, **kwargs):
         """Send a direct message to a user."""
         if not isinstance(user, (discord.User, discord.Member)):
             user = self.get_user(user)
         if user:
             if not user.dm_channel:
                 await user.create_dm()
-            await user.dm_channel.send(message)
+            return await user.dm_channel.send(message, **kwargs)
 
     async def on_ready(self):
         """Bot initialisation upon connecting to Discord."""
         print(f"{self.user} has connected to Discord!")
+        await self.change_presence(
+            activity=discord.Activity(name="Python lectures", type=discord.ActivityType.watching))
 
-    async def on_command(self, ctx):
-        ''' This function is triggered just before each invoked command. 
+    async def on_command_completion(self, ctx):
+        ''' This function is triggered after each invoked command.
             It is used to delete the original command message. '''
         try:
             await ctx.message.delete()
